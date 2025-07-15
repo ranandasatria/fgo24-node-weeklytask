@@ -1,0 +1,26 @@
+POST /auth/login
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "12345"
+}
+
+#### 
+GET /users/1231
+Host: localhost:8080
+
+####
+GET /users
+Host: localhost:8080
+
+####
+POST /users
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "email": "nanda@mail.com",
+  "password": "123123"
+}
