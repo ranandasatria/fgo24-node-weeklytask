@@ -2,13 +2,25 @@ const {constants: http} = require('http2')
 const model = require("../models/users.model");
 
 
-exports.createUser = function(req, res){
-  const newUser = model.createUser(req.body);
-  return res.status(http.HTTP_STATUS_CREATED).json({
-    success: true,
-    message: "Account created",
-    results:  newUser
-  })
+exports.createUser = function(req, res){ // create a new user (later for admin)
+  const {email, password} = req.body;
+  
+    if(model.getUserByEmail(email)){
+      return res.status(http.HTTP_STATUS_CONFLICT).json({
+        success: false,
+        message: 'Email is already registered'
+      })
+    }
+  
+    const newUser = model.createUser({email, password})
+      return res.status(http.HTTP_STATUS_CREATED).json({
+      success: true,
+      message: "Account created",
+      results:  {
+        id: newUser.id,
+        email: newUser.email
+      }
+    })
 }
 
 exports.detailUser = function(req, res){
