@@ -23,8 +23,10 @@ exports.detailUser = function(req, res){
 }
 
 exports.listAllUsers = function(req, res){
+  const allUser = model.getUser()
   return res.json({
     success: true,
-    message: 'List all users'
+    message: 'List all users',
+    results: allUser
   })
 }
