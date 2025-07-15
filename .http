@@ -8,7 +8,7 @@ Content-Type: application/json
 }
 
 #### 
-GET /users/1231
+GET /users/1
 Host: localhost:8080
 
 ####

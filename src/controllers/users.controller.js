@@ -11,19 +11,25 @@ exports.createUser = function(req, res){
 }
 
 exports.detailUser = function(req, res){
-  const {id} = req.params
+  const id = parseInt(req.params.id);
+  const detailUser = model.getUserByID(id);
+
+  if (!detailUser) {
+    return res.status(http.HTTP_STATUS_NOT_FOUND).json({
+      success: false,
+      message: "User not found"
+    });
+  }
+
   res.status(http.HTTP_STATUS_OK).json({
     success: true,
     message: "Detail User",
-    results: {
-      id: parseInt(id),
-      name: "John"
-    }
-  })
+    results: detailUser
+  });
 }
 
 exports.listAllUsers = function(req, res){
-  const allUser = model.getUser()
+  const allUser = model.getAllUser()
   return res.json({
     success: true,
     message: 'List all users',

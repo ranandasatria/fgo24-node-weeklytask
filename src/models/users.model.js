@@ -9,6 +9,10 @@ exports.createUser = (data)=>{
   return newUser;
 };
 
-exports.getUser = ()=>{
+exports.getAllUser = ()=>{
   return users;
 };
+
+exports.getUserByID = (id)=>{
+ return users.find((u)=> u.id === id)
+}
