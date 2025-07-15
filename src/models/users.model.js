@@ -17,6 +17,9 @@ exports.getUserByID = (id)=>{
  return users.find((u)=> u.id === id)
 }
 
+exports.getUserByEmail = (email)=>{
+  return users.find((u)=>u.email === email)
+}
 
 exports.updateUser = (id, data) => {
   const idx = users.findIndex(u => u.id === id);
