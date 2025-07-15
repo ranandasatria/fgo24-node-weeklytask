@@ -1,8 +1,12 @@
 let users = [];
 
 exports.createUser = (data)=>{
-  users.push(data);
-  return data;
+  const newUser = {
+    id: users.length ? users[users.length - 1].id +1 : 1,
+    ...data
+  };
+  users.push(newUser);
+  return newUser;
 };
 
 exports.getUser = ()=>{
