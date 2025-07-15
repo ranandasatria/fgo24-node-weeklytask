@@ -21,7 +21,7 @@ Host: localhost:8080
 Content-Type: application/json
 
 {
-  "email": "nanda1@mail.com",
+  "email": "123@mail.com",
   "password": "123123"
 }
 
@@ -33,3 +33,7 @@ Content-Type: application/json
 {
   "name": "nanda"
 }
+
+#### 
+DELETE /users/1
+Host: localhost:8080

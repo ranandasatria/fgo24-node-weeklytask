@@ -44,14 +44,32 @@ exports.updateUser = function(req, res){
 
   if (!updatedUser){
     return res.status(http.HTTP_STATUS_NOT_FOUND).json({
-      status: false,
+      success: false,
       message: "User not found"
     });
   };
 
   return res.status(http.HTTP_STATUS_OK).json({
-    status: true,
+    success: true,
     message: "Profile updated",
     results: updatedUser
+  });
+}
+
+exports.deleteUser = function(req, res){
+  const id = parseInt(req.params.id);
+  const deletedUser = model.deleteUser(id)
+
+  if (!deletedUser){
+    return res.status(http.HTTP_STATUS_NOT_FOUND).json({
+      success: false,
+      message: "User not found"
+    });
+  };
+
+  return res.status(http.HTTP_STATUS_OK).json({
+    success: true,
+    message: "User deleted",
+    results: deletedUser
   });
 }

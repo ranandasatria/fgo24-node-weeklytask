@@ -21,7 +21,14 @@ exports.getUserByID = (id)=>{
 exports.updateUser = (id, data) => {
   const idx = users.findIndex(u => u.id === id);
   if (idx === -1) return null;
-  
+
   users[idx] = { ...users[idx], ...data };
   return users[idx];
 };
+
+exports.deleteUser = (id) => {
+ const idx = users.findIndex(u => u.id === id);
+ if (idx === -1) return null;
+ 
+ return users.splice(idx, 1)[0]
+}
