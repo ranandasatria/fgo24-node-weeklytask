@@ -3,7 +3,7 @@ Host: localhost:8080
 Content-Type: application/json
 
 {
-  "email": "123@mail.com",
+  "email": "12131@mail.com",
   "password": "123123"
 }
 
@@ -14,12 +14,16 @@ Host: localhost:8080
 Content-Type: application/json
 
 {
-  "email": "123@mail.com",
+  "email": "12131@mail.com",
   "password": "123123"
 }
 
 ####
 GET /users
+Host: localhost:8080
+
+####
+GET /users?search=1213
 Host: localhost:8080
 
 #### 

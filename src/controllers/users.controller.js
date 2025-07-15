@@ -23,6 +23,24 @@ exports.createUser = function(req, res){ // create a new user (later for admin)
     })
 }
 
+
+exports.listAllUsers = function(req, res){
+  const users = model.getAllUser(req.query.search);
+
+  const result = users.map(u => {
+    const safe = { ...u}
+    delete safe.password
+    return safe
+  })
+
+  return res.json({
+    success: true,
+    message: req.query.search? `Search results for "${req.query.search}` : 'List all users',
+    results: result
+  })
+}
+
+
 exports.detailUser = function(req, res){
   const id = parseInt(req.params.id);
   const detailUser = model.getUserByID(id);
@@ -34,21 +52,16 @@ exports.detailUser = function(req, res){
     });
   }
 
+  const safeUser = { ...detailUser}
+  delete safeUser.password
+
   return res.status(http.HTTP_STATUS_OK).json({
     success: true,
     message: "Detail User",
-    results: detailUser
+    results: safeUser
   });
 }
 
-exports.listAllUsers = function(req, res){
-  const allUser = model.getAllUser()
-  return res.json({
-    success: true,
-    message: 'List all users',
-    results: allUser
-  })
-}
 
 exports.updateUser = function(req, res){
   const id = parseInt(req.params.id);
@@ -61,10 +74,13 @@ exports.updateUser = function(req, res){
     });
   };
 
+  const safeUser = {...updatedUser}
+  delete safeUser.password
+
   return res.status(http.HTTP_STATUS_OK).json({
     success: true,
     message: "Profile updated",
-    results: updatedUser
+    results: safeUser
   });
 }
 

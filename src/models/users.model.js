@@ -9,8 +9,14 @@ exports.createUser = (data)=>{
   return newUser;
 };
 
-exports.getAllUser = ()=>{
-  return users;
+exports.getAllUser = (keyword)=>{
+  if (!keyword){
+    return users;
+  }
+  const term = keyword.toLowerCase();
+  return users.filter(
+    (u) => u.email.toLowerCase().includes(term)
+  )
 };
 
 exports.getUserByID = (id)=>{
