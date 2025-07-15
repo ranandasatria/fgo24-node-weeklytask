@@ -21,6 +21,15 @@ Host: localhost:8080
 Content-Type: application/json
 
 {
-  "email": "nanda@mail.com",
+  "email": "nanda1@mail.com",
   "password": "123123"
+}
+
+####
+PATCH /users/1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "name": "nanda"
 }

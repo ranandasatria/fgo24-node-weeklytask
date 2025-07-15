@@ -16,3 +16,12 @@ exports.getAllUser = ()=>{
 exports.getUserByID = (id)=>{
  return users.find((u)=> u.id === id)
 }
+
+
+exports.updateUser = (id, data) => {
+  const idx = users.findIndex(u => u.id === id);
+  if (idx === -1) return null;
+  
+  users[idx] = { ...users[idx], ...data };
+  return users[idx];
+};

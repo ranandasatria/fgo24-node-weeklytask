@@ -1,5 +1,6 @@
 const {constants: http} = require('http2')
-const model = require("../models/users.model")
+const model = require("../models/users.model");
+
 
 exports.createUser = function(req, res){
   const newUser = model.createUser(req.body);
@@ -21,7 +22,7 @@ exports.detailUser = function(req, res){
     });
   }
 
-  res.status(http.HTTP_STATUS_OK).json({
+  return res.status(http.HTTP_STATUS_OK).json({
     success: true,
     message: "Detail User",
     results: detailUser
@@ -35,4 +36,22 @@ exports.listAllUsers = function(req, res){
     message: 'List all users',
     results: allUser
   })
+}
+
+exports.updateUser = function(req, res){
+  const id = parseInt(req.params.id);
+  const updatedUser = model.updateUser(id, req.body)
+
+  if (!updatedUser){
+    return res.status(http.HTTP_STATUS_NOT_FOUND).json({
+      status: false,
+      message: "User not found"
+    });
+  };
+
+  return res.status(http.HTTP_STATUS_OK).json({
+    status: true,
+    message: "Profile updated",
+    results: updatedUser
+  });
 }
