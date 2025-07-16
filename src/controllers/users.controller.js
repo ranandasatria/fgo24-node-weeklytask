@@ -24,10 +24,35 @@ exports.createUser = function(req, res){ // create a new user (later for admin)
 }
 
 
-exports.listAllUsers = function(req, res){
-  const users = model.getAllUser(req.query.search);
+// exports.listAllUsers = function(req, res){
+//   const users = model.getAllUser(req.query.search);
 
-  const result = users.map(u => {
+//   const result = users.map(u => {
+//     const safe = { ...u}
+//     delete safe.password
+//     return safe
+//   })
+
+//   return res.json({
+//     success: true,
+//     message: req.query.search? `Search results for "${req.query.search}` : 'List all users',
+//     results: result
+//   })
+// }
+
+exports.listAllUsers = function(req, res){
+  const { search, page= 1} = req.query
+  const limit = 5
+  const pageNumber = parseInt(page) || 1
+
+  const users = model.getAllUser(search)
+  const totalData = users.length
+  const totalPage = Math.ceil(totalData / limit)
+  const offset = (pageNumber - 1) * limit
+
+  const paginatedUser = users.slice(offset, offset + limit)
+
+  const result = paginatedUser.map(u => {
     const safe = { ...u}
     delete safe.password
     return safe
@@ -35,10 +60,21 @@ exports.listAllUsers = function(req, res){
 
   return res.json({
     success: true,
-    message: req.query.search? `Search results for "${req.query.search}` : 'List all users',
-    results: result
+    message: search ? `Search results for ${req.query.search}:` : 'All users:',
+    results: result,
+    pageInfo: {
+      totalData,
+      totalPage,
+      currentPage: pageNumber,
+      limit,
+      next: pageNumber < totalPage ? `/users?page=${pageNumber + 1}${search ? `&search=${search}`:''}`
+      : null,
+      prev: pageNumber > 1 ? `/users?page=${pageNumber - 1}${search ? `&search=${search}`:''}`
+      : null
+    }
   })
 }
+
 
 
 exports.detailUser = function(req, res){
