@@ -24,22 +24,6 @@ exports.createUser = function(req, res){ // create a new user (later for admin)
 }
 
 
-// exports.listAllUsers = function(req, res){
-//   const users = model.getAllUser(req.query.search);
-
-//   const result = users.map(u => {
-//     const safe = { ...u}
-//     delete safe.password
-//     return safe
-//   })
-
-//   return res.json({
-//     success: true,
-//     message: req.query.search? `Search results for "${req.query.search}` : 'List all users',
-//     results: result
-//   })
-// }
-
 exports.listAllUsers = function(req, res){
   const { search, page= 1} = req.query
   const limit = 5
@@ -74,8 +58,6 @@ exports.listAllUsers = function(req, res){
     }
   })
 }
-
-
 
 exports.detailUser = function(req, res){
   const id = parseInt(req.params.id);
