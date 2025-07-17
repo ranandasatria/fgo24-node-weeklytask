@@ -26,7 +26,7 @@ Content-Type: application/json
 ####
 GET /users
 Host: localhost:8080
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiIxMjNAbWFpbC5jb20iLCJpYXQiOjE3NTI3MzQ3MjIsImV4cCI6MTc1MjczODMyMn0.0-5bE2Bi5IONIOCN1kMkkEVifuun9dHEGblpGdFNxbU
+Authorization: Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiIxMjNAbWFpbC5jb20iLCJpYXQiOjE3NTI3MzQ3MjIsImV4cCI6MTc1MjczODMyMn0.0-5bE2Bi5IONIOCN1kMkkEVifuun9dHEGblpGdFNxbU
 
 ####
 GET /users?search=123&page=1
@@ -35,7 +35,7 @@ Host: localhost:8080
 #### 
 GET /users/1
 Host: localhost:8080
-Authorization: token123
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiIxMjNAbWFpbC5jb20iLCJpYXQiOjE3NTI3MzUzODksImV4cCI6MTc1MjczODk4OX0.hQ_NZlBhFh4W1dFoJIg1eCdDvPWjb0fEsXKya64WwPc
 
 #### Create a new user [for admin later]
 POST /users

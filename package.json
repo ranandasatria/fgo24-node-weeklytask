@@ -18,12 +18,15 @@
     "express-validator": "^7.2.1",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
-    "multer": "^2.0.1"
+    "multer": "^2.0.1",
+    "pg": "^8.16.3",
+    "sequelize": "^6.37.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.31.0",
     "@types/express": "^5.0.3",
     "eslint": "^9.31.0",
-    "globals": "^16.3.0"
+    "globals": "^16.3.0",
+    "sequelize-cli": "^6.6.3"
   }
 }
