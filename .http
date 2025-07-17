@@ -40,7 +40,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiO
 #### Create a new user [for admin later]
 POST /users
 Host: localhost:8080
-Authorization: token123
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiIxMjNAbWFpbC5jb20iLCJpYXQiOjE3NTI3MzUzODksImV4cCI6MTc1MjczODk4OX0.hQ_NZlBhFh4W1dFoJIg1eCdDvPWjb0fEsXKya64WwPc
 Content-Type: application/json
 
 {

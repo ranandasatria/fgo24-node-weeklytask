@@ -1,5 +1,5 @@
 const {constants: http} = require('http2')
-const model = require('../models/users.model');
+const model = require('../old/users.model');
 const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken')
 
