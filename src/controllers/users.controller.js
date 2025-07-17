@@ -3,7 +3,10 @@ const model = require("../models/users.model");
 
 
 exports.createUser = function(req, res){ // create a new user (later for admin)
+  console.log('req.body:', req.body);
+  console.log('req.file:', req.file);
   const {email, password} = req.body;
+  const picture = req.file ? req.file.filename : null;
   
     if(model.getUserByEmail(email)){
       return res.status(http.HTTP_STATUS_CONFLICT).json({
@@ -12,13 +15,14 @@ exports.createUser = function(req, res){ // create a new user (later for admin)
       })
     }
   
-    const newUser = model.createUser({email, password})
+    const newUser = model.createUser({email, password, picture})
       return res.status(http.HTTP_STATUS_CREATED).json({
       success: true,
       message: "Account created",
       results:  {
         id: newUser.id,
-        email: newUser.email
+        email: newUser.email,
+        picture: newUser.picture
       }
     })
 }
