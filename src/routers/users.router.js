@@ -18,7 +18,7 @@ const userController = require("../controllers/users.controller");
 const profilePicture = multer({ storage });
 
 userRouter.get("/", userController.listAllUsers);
-// userRouter.get("/:id", userController.detailUser);
+userRouter.get("/:id", userController.detailUser);
 userRouter.post("/", profilePicture.single("picture"), userController.createUser);
 // userRouter.patch("/:id", userController.updateUser);
 // userRouter.delete("/:id", userController.deleteUser);

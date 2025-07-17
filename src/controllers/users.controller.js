@@ -82,6 +82,31 @@ exports.listAllUsers = async (req, res) => {
   }
 };
 
+exports.detailUser = async (req, res) => {
+  const id = parseInt(req.params.id);
+  try{
+    const detailUser = await Users.findByPk(id)
+    if(!detailUser){
+      return res.status(http.HTTP_STATUS_NOT_FOUND).json({
+        success: false,
+        message: 'User not found'
+      })
+    }
+
+    return res.status(http.HTTP_STATUS_OK).json({
+    success: true,
+    message: "Detail User",
+    results: detailUser
+    });
+  } catch (err){
+    console.error(err)
+      return res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
+}
+
 
 // with in-memory model:
 
