@@ -1,5 +1,6 @@
 const {constants: http} = require('http2')
-const model = require('../models/users.model')
+const model = require('../models/users.model');
+const { validationResult } = require('express-validator');
 
 
 exports.register = function(req, res){
@@ -27,6 +28,17 @@ exports.register = function(req, res){
 exports.login = function(req, res){
   const {email ,password} = req.body;
 
+  const validate = validationResult(req);
+
+  if(!validate.isEmpty()){
+    return res.status(http.HTTP_STATUS_BAD_REQUEST).json({
+      success: false,
+      message: "Validation error",
+      errors: validate.array(),
+    })
+  }
+
+
   const user = model.getUserByEmail(email)
   
   if(!user || user.password !== password){
@@ -35,7 +47,7 @@ exports.login = function(req, res){
     message: 'Wrong email or password'
   })
   }
-  return res.status(http.HTTP_STATUS_FORBIDDEN).json({
+  return res.status(http.HTTP_STATUS_OK).json({
     success: true,
     message: 'Login Success'
   })
