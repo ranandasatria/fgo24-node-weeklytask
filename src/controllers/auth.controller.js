@@ -1,6 +1,7 @@
 const {constants: http} = require('http2')
 const model = require('../models/users.model');
 const { validationResult } = require('express-validator');
+const jwt = require('jsonwebtoken')
 
 
 exports.register = function(req, res){
@@ -47,8 +48,19 @@ exports.login = function(req, res){
     message: 'Wrong email or password'
   })
   }
+
+  const token = jwt.sign(
+    { id: user.id,
+      email: user.email
+    },
+    process.env.APP_SECRET,
+    { expiresIn: '1h'}
+  );
+
+
   return res.status(http.HTTP_STATUS_OK).json({
     success: true,
-    message: 'Login Success'
+    message: 'Login Success',
+    token
   })
 }
