@@ -1,7 +1,6 @@
 const {constants: http} = require('http2')
 const { Users } = require("../models");
-
-
+const { Op } = require("sequelize");
 
 exports.createUser = async function(req, res){ // create a new user (later for admin)
   console.log('req.body:', req.body);
@@ -9,24 +8,6 @@ exports.createUser = async function(req, res){ // create a new user (later for a
   const {email, password} = req.body;
   const picture = req.file ? req.file.filename : null;
   
-    // if(model.getUserByEmail(email)){
-    //   return res.status(http.HTTP_STATUS_CONFLICT).json({
-    //     success: false,
-    //     message: 'Email is already registered'
-    //   })
-    // }
-
-    //  const newUser = model.createUser({email, password, picture})
-    //   return res.status(http.HTTP_STATUS_CREATED).json({
-    //   success: true,
-    //   message: "Account created",
-    //   results:  {
-    //     id: newUser.id,
-    //     email: newUser.email,
-    //     picture: newUser.picture
-    //   }
-    // })
-
     try {
       const existingUser = await Users.findOne({where:{email}})
       if (existingUser){
@@ -55,6 +36,79 @@ exports.createUser = async function(req, res){ // create a new user (later for a
     }
 }
 
+exports.listAllUsers = async (req, res) => {
+  try {
+    const { search = "", page = 1 } = req.query;
+    const limit = 5;
+    const pageNumber = parseInt(page) || 1;
+    const offset = (pageNumber - 1) * limit;
+
+    const { count: totalData, rows: users } = await Users.findAndCountAll({
+      where: {
+       email: { 
+        [Op.iLike]: `%${search}%` 
+        }
+      },
+      limit,
+      offset
+    });
+
+    const totalPage = Math.ceil(totalData / limit);
+    const result = users.map(user => {
+      const safe = user.toJSON();
+      delete safe.password;
+      return safe;
+    });
+
+    return res.json({
+      success: true,
+      message: search ? `Search results for "${search}":` : "All users:",
+      results: result,
+      pageInfo: {
+        totalData,
+        totalPage,
+        currentPage: pageNumber,
+        limit,
+        next: pageNumber < totalPage ? `/users?page=${pageNumber + 1}&search=${search}` : null,
+        prev: pageNumber > 1 ? `/users?page=${pageNumber - 1}&search=${search}` : null
+      }
+    });
+  } catch (err) {
+    console.error("Error in listAllUsers:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
+};
+
+
+// with in-memory model:
+
+// exports.createUser = async function(req, res){ // create a new user (later for admin)
+//   console.log('req.body:', req.body);
+//   console.log('req.file:', req.file);
+//   const {email, password} = req.body;
+//   const picture = req.file ? req.file.filename : null;
+  
+    // if(model.getUserByEmail(email)){
+    //   return res.status(http.HTTP_STATUS_CONFLICT).json({
+    //     success: false,
+    //     message: 'Email is already registered'
+    //   })
+    // }
+
+    //  const newUser = model.createUser({email, password, picture})
+    //   return res.status(http.HTTP_STATUS_CREATED).json({
+    //   success: true,
+    //   message: "Account created",
+    //   results:  {
+    //     id: newUser.id,
+    //     email: newUser.email,
+    //     picture: newUser.picture
+    //   }
+    // })
+// }
 
 // exports.listAllUsers = function(req, res){
 //   const { search, page= 1} = req.query
