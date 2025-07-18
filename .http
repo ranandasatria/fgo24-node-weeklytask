@@ -32,7 +32,7 @@ GET /users?search=123&page=1
 Host: localhost:8080
 
 #### 
-GET /users/1
+GET /users/2
 Host: localhost:8080
 
 #### Create a new user [for admin later]
@@ -56,8 +56,7 @@ Content-Type: application/json
 }
 
 #### Delete user
-DELETE /users/1
-Authorization: token123
+DELETE /users/3
 Host: localhost:8080
 
 

@@ -107,6 +107,32 @@ exports.detailUser = async (req, res) => {
   }
 }
 
+exports.deleteUser = async (req, res) => {
+  const id = parseInt(req.params.id);
+  try{
+    const foundUser = await Users.findByPk(id)
+    if(!foundUser){
+      return res.status(http.HTTP_STATUS_NOT_FOUND).json({
+        success: false,
+        message: 'User not found'
+      })
+    }
+    await foundUser.destroy()
+    
+    return res.status(http.HTTP_STATUS_OK).json({
+      success: true,
+      message: 'User deleted',
+      results: foundUser
+    })
+  } catch(err){
+    console.error(err)
+    return res.status(http.HTTP_STATUS_INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: 'Failed to delete user'
+    })
+}
+}
+
 
 // with in-memory model:
 
