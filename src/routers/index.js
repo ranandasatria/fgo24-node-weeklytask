@@ -1,4 +1,4 @@
-// const authMiddleware = require('../middlewares/auth.middleware')
+const authMiddleware = require('../middlewares/auth.middleware')
 
 const routers = require('express').Router()
 
@@ -7,7 +7,7 @@ routers.get('/', (req, res) => {
 })
 
 routers.use('', require('./auth.router'))
-// routers.use('/users', authMiddleware, require('./users.router'))
-routers.use('/users', require('./users.router'))
+routers.use('/users', authMiddleware, require('./users.router'))
+// routers.use('/users', require('./users.router'))
 
 module.exports = routers

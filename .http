@@ -26,6 +26,7 @@ Content-Type: application/json
 ####
 GET /users
 Host: localhost:8080
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiIxMjNAbWFpbC5jb20iLCJpYXQiOjE3NTI4NTc0OTYsImV4cCI6MTc1Mjg2MTA5Nn0.N3NG3YAg9lf49ERlDR9dd73JuKn56zTngTPo9i2jkcY
 
 ####
 GET /users?search=123&page=1
