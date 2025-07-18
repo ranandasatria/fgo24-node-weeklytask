@@ -45,25 +45,21 @@ exports.listAllUsers = async (req, res) => {
 
     const { count: totalData, rows: users } = await Users.findAndCountAll({
       where: {
-       email: { 
-        [Op.iLike]: `%${search}%` 
+        email: {
+          [Op.iLike]: `%${search}%`
         }
       },
+      attributes: { exclude: ['password'] },
       limit,
       offset
     });
 
     const totalPage = Math.ceil(totalData / limit);
-    const result = users.map(user => {
-      const safe = user.toJSON();
-      delete safe.password;
-      return safe;
-    });
 
     return res.json({
       success: true,
       message: search ? `Search results for "${search}":` : "All users:",
-      results: result,
+      results: users,
       pageInfo: {
         totalData,
         totalPage,
@@ -82,10 +78,13 @@ exports.listAllUsers = async (req, res) => {
   }
 };
 
+
 exports.detailUser = async (req, res) => {
   const id = parseInt(req.params.id);
   try{
-    const detailUser = await Users.findByPk(id)
+    const detailUser = await Users.findByPk(id, {
+      attributes: {exclude: 'password'}
+    })
     if(!detailUser){
       return res.status(http.HTTP_STATUS_NOT_FOUND).json({
         success: false,
@@ -118,7 +117,7 @@ exports.deleteUser = async (req, res) => {
       })
     }
     await foundUser.destroy()
-    
+
     return res.status(http.HTTP_STATUS_OK).json({
       success: true,
       message: 'User deleted',
@@ -131,6 +130,35 @@ exports.deleteUser = async (req, res) => {
       message: 'Failed to delete user'
     })
 }
+}
+
+exports.updateUser = async (req, res)=>{
+  const id = parseInt(req.params.id)
+  try {
+    const foundUser = await Users.findByPk(id, {
+      attributes: {exclude: 'password'}
+    })
+    if(!foundUser){
+      return res.status(http.HTTP_STATUS_NOT_FOUND).json({
+        success: false,
+        message: 'User not found'
+      })
+    }
+
+    await foundUser.update(req.body)
+
+    return res.status(http.HTTP_STATUS_OK).json({
+      success: true,
+      message: 'User updated',
+      results: foundUser
+    })
+  }catch(err){
+    console.error(err)
+    return res.status(http.HTTP_STATUS_INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: 'Failed to update user'
+    })
+  }
 }
 
 
