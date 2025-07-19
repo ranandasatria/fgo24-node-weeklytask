@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     paymentName: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'paymentMethod',
+    modelName: 'PaymentMethod',
     tableName: 'Payment_Method',
     underscored: true,
     timestamps: true
