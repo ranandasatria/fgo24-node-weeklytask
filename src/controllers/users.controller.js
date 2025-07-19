@@ -132,34 +132,51 @@ exports.deleteUser = async (req, res) => {
 }
 }
 
-exports.updateUser = async (req, res)=>{
-  const id = parseInt(req.params.id)
+exports.updateUser = async (req, res) => {
+  const id = parseInt(req.params.id);
   try {
     const foundUser = await Users.findByPk(id, {
-      attributes: {exclude: 'password'}
-    })
-    if(!foundUser){
+      attributes: { exclude: ['password'] }
+    });
+
+    if (!foundUser) {
       return res.status(http.HTTP_STATUS_NOT_FOUND).json({
         success: false,
         message: 'User not found'
-      })
+      });
     }
 
-    await foundUser.update(req.body)
+    if (req.body.email) {
+      const existingUser = await Users.findOne({
+        where: {
+          email: req.body.email,
+          id: { [Op.ne]: id }
+        }
+      });
+
+      if (existingUser) {
+        return res.status(http.HTTP_STATUS_CONFLICT).json({
+          success: false,
+          message: 'Email is already used'
+        });
+      }
+    }
+
+    await foundUser.update(req.body);
 
     return res.status(http.HTTP_STATUS_OK).json({
       success: true,
       message: 'User updated',
       results: foundUser
-    })
-  }catch(err){
-    console.error(err)
+    });
+  } catch (err) {
+    console.error(err);
     return res.status(http.HTTP_STATUS_INTERNAL_SERVER_ERROR).json({
       success: false,
       message: 'Failed to update user'
-    })
+    });
   }
-}
+};
 
 
 // with in-memory model:
