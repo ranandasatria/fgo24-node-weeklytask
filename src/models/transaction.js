@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       Transaction.hasMany(models.TransactionDetail, {
-        foreignKey: 'transactionId'
+        foreignKey: 'transactionId',
+        as: 'details'
       });
     }
   }

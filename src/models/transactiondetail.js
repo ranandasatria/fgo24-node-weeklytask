@@ -4,7 +4,8 @@ module.exports = (sequelize, DataTypes) => {
   class TransactionDetail extends Model {
     static associate(models) {
       TransactionDetail.belongsTo(models.Transaction, {
-        foreignKey: 'transactionId'
+        foreignKey: 'transactionId',
+        as: 'transaction'
       });
     }
   }

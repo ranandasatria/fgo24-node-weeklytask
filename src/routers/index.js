@@ -24,4 +24,9 @@ routers.use('/admin/actors', require('./actor.router'));
 routers.use('/payment-method', require('./paymentmethod.router'))
 routers.use('/admin/payment-method', require('./paymentmethod.router'));
 
+routers.use('/transactions', require('./transaction.router'));
+routers.use('/admin/transactions', require('./transaction.router'));
+
+
+
 module.exports = routers
