@@ -1,5 +1,7 @@
 const { Movie, Genre, Director, Actor } = require('../models');
 const { constants: http } = require('http2');
+const { Op } = require('sequelize');
+
 
 exports.createMovie = async (req, res) => {
   const {
@@ -318,6 +320,115 @@ exports.updateMovie = async (req, res) => {
     return res.status(http.HTTP_STATUS_INTERNAL_SERVER_ERROR).json({ 
       success: false, 
       message: 'Failed to update movie' 
+    });
+  }
+};
+
+
+exports.getNowShowingMovies = async (req, res) => {
+  try {
+    const today = new Date();
+
+    const movies = await Movie.findAll({
+      where: {
+        releaseDate: {
+          [Op.lte]: today
+        }
+      },
+      include: [
+        {
+          model: Genre,
+          attributes: ['id', 'genre_name'],
+          through: { attributes: [] }
+        },
+        {
+          model: Director,
+          attributes: ['id', 'director_name'],
+          through: { attributes: [] }
+        },
+        {
+          model: Actor,
+          attributes: ['id', 'actor_name'],
+          through: { attributes: [] }
+        }
+      ],
+      order: [['releaseDate', 'DESC']]
+    });
+
+    const formattedMovies = movies.map((movie) => {
+      const { Genres, Directors, Actors, ...movieData } = movie.toJSON();
+      return {
+        ...movieData,
+        genres: Genres,
+        directors: Directors,
+        actors: Actors
+      };
+    });
+
+    return res.status(http.HTTP_STATUS_OK).json({
+      success: true,
+      message: 'Now showing movies',
+      results: formattedMovies
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(http.HTTP_STATUS_INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: 'Failed to fetch now showing movies'
+    });
+  }
+};
+
+exports.getUpcomingMovies = async (req, res) => {
+  try {
+    const today = new Date();
+
+    const movies = await Movie.findAll({
+      where: {
+        releaseDate: {
+          [Op.gt]: today
+        }
+      },
+      include: [
+        {
+          model: Genre,
+          attributes: ['id', 'genre_name'],
+          through: { attributes: [] }
+        },
+        {
+          model: Director,
+          attributes: ['id', 'director_name'],
+          through: { attributes: [] }
+        },
+        {
+          model: Actor,
+          attributes: ['id', 'actor_name'],
+          through: { attributes: [] }
+        }
+      ],
+      order: [['releaseDate', 'ASC']]
+    });
+
+    const formattedMovies = movies.map((movie) => {
+      const { Genres, Directors, Actors, ...movieData } = movie.toJSON();
+      return {
+        ...movieData,
+        genres: Genres,
+        directors: Directors,
+        actors: Actors
+      };
+    });
+
+    return res.status(http.HTTP_STATUS_OK).json({
+      success: true,
+      message: 'Upcoming movies',
+      results: formattedMovies
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(http.HTTP_STATUS_INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: 'Failed to fetch upcoming movies'
     });
   }
 };

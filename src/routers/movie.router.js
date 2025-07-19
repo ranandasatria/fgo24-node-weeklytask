@@ -21,7 +21,9 @@ const movieStorage = multer.diskStorage({
 const uploadMovieImages = multer({ storage: movieStorage });
 
 router.get('/', movieController.getAllMovies)
-router.get('/:id', movieController.getMovieById)
+
+router.get('/now-showing', movieController.getNowShowingMovies);
+router.get('/upcoming', movieController.getUpcomingMovies);
 
 router.post('/',
   authMiddleware,
@@ -31,6 +33,9 @@ router.post('/',
   ]),
   movieController.createMovie
 );
+
+router.get('/:id', movieController.getMovieById)
+
 
 router.patch('/:id',
   uploadMovieImages.fields([
