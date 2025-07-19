@@ -24,16 +24,25 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   Movie.init({
-    title: DataTypes.STRING,
-    description: DataTypes.TEXT,
-    release_date: DataTypes.DATE,
-    duration_minutes: DataTypes.INTEGER,
-    image: DataTypes.STRING,
-    horizontal_image: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Movie',
-  });
+  title: DataTypes.STRING,
+  description: DataTypes.TEXT,
+  releaseDate: {
+    type: DataTypes.DATE,
+    field: 'release_date'
+  },
+  durationMinutes: {
+    type: DataTypes.INTEGER,
+    field: 'duration_minutes'
+  },
+  image: DataTypes.STRING,
+  horizontalImage: {
+    type: DataTypes.STRING,
+    field: 'horizontal_image'
+  }
+}, {
+  sequelize,
+  modelName: 'Movie',
+});
 
   return Movie;
 };
