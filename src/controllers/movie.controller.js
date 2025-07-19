@@ -53,12 +53,24 @@ exports.createMovie = async (req, res) => {
 exports.getAllMovies = async (req, res) => {
   try {
     const movies = await Movie.findAll({
-      include: [
-        { model: Genre, through: { attributes: [] } },
-        { model: Director, through: { attributes: [] } },
-        { model: Actor, through: { attributes: [] } }
-      ]
-    });
+  include: [
+    {
+      model: Genre,
+      attributes: ['id', 'genre_name'],
+      through: { attributes: [] }
+    },
+    {
+      model: Director,
+      attributes: ['id', 'director_name'],
+      through: { attributes: [] }
+    },
+    {
+      model: Actor,
+      attributes: ['id', 'actor_name'],
+      through: { attributes: [] }
+    }
+  ]
+  });
 
     return res.status(http.HTTP_STATUS_OK).json({
       success: true,
@@ -70,6 +82,51 @@ exports.getAllMovies = async (req, res) => {
     return res.status(http.HTTP_STATUS_INTERNAL_SERVER_ERROR).json({
       success: false,
       message: 'Failed to fetch movies'
+    });
+  }
+};
+
+exports.getMovieById = async (req, res) => {
+  const id = parseInt(req.params.id);
+  try {
+    const movie = await Movie.findByPk(id, {
+      include: [
+        {
+          model: Genre,
+          attributes: ['id', 'genre_name'],
+          through: { attributes: [] }
+        },
+        {
+          model: Director,
+          attributes: ['id', 'director_name'],
+          through: { attributes: [] }
+        },
+        {
+          model: Actor,
+          attributes: ['id', 'actor_name'],
+          through: { attributes: [] }
+        }
+      ]
+    });
+
+    if (!movie) {
+      return res.status(http.HTTP_STATUS_NOT_FOUND).json({
+        success: false,
+        message: 'Movie not found'
+      });
+    }
+
+    return res.status(http.HTTP_STATUS_OK).json({
+      success: true,
+      message: 'Movie detail',
+      result: movie
+    });
+
+  } catch (err) {
+    console.error(err);
+    return res.status(http.HTTP_STATUS_INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: 'Failed to fetch movie'
     });
   }
 };

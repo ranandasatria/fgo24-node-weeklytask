@@ -4,6 +4,7 @@ const movieController = require('../controllers/movie.controller');
 const authMiddleware = require('../middlewares/auth.middleware');
 
 router.get('/', movieController.getAllMovies)
+router.get('/:id', movieController.getMovieById)
 
 router.post('/', authMiddleware, movieController.createMovie)
 
