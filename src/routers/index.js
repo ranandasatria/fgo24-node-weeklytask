@@ -8,6 +8,11 @@ routers.get('/', (req, res) => {
 
 routers.use('', require('./auth.router'))
 routers.use('/users', authMiddleware, require('./users.router'))
-// routers.use('/users', require('./users.router'))
+routers.use('/genres', require('./genre.router')); 
+routers.use('/admin/genres', require('./genre.router'));
+routers.use('/directors', require('./director.router'))
+routers.use('/admin/directors', require('./director.router'));
+routers.use('/actors', require('./actor.router'))
+routers.use('/admin/actors', require('./actor.router'));
 
 module.exports = routers
