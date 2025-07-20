@@ -2,7 +2,7 @@ const {constants: http} = require('http2')
 const { Users } = require("../models");
 const { Op } = require("sequelize");
 
-exports.createUser = async function(req, res){ // create a new user (later for admin)
+exports.createUser = async function(req, res){
   console.log('req.body:', req.body);
   console.log('req.file:', req.file);
   const {email, password} = req.body;
