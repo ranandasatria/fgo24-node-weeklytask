@@ -162,7 +162,12 @@ exports.updateUser = async (req, res) => {
       }
     }
 
-    await foundUser.update(req.body);
+    const updateData = {
+      ...req.body,
+      picture: req.file?.filename || foundUser.picture
+    };
+
+    await foundUser.update(updateData);
 
     return res.status(http.HTTP_STATUS_OK).json({
       success: true,
