@@ -17,7 +17,7 @@ exports.createUser = async function(req, res){ // create a new user (later for a
         })
       }
 
-      const newUser = await Users.create({email, password, picture})
+      const newUser = await Users.create({email, password, picture, role: 'user'})
       return res.status(http.HTTP_STATUS_CREATED).json({
       success: true,
       message: "Account created",
