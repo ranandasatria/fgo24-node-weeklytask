@@ -66,13 +66,13 @@ Host: localhost:8080
 
 ### Upload user with picture
 POST http://localhost:8080/users
-Authorization: token123
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiZW1haWwiOiJrb2Nha0BtYWlsLmNvbSIsImlhdCI6MTc1MzAxNzYwMSwiZXhwIjoxNzUzMDIxMjAxfQ.WWGLNuihrfCrYFFOdWVnrck1gKgHvOnzyabUOekYTDY
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="email"
 
-1213@mail.com
+1213123@mail.com
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="password"
 
