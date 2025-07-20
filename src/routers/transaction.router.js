@@ -5,8 +5,9 @@ const authMiddleware = require('../middlewares/auth.middleware');
 
 router.post('/', authMiddleware, transactionController.createTransaction);
 
-router.get('/', authMiddleware, transactionController.getAllTransactions);
+router.get('/admin/transactions', authMiddleware, transactionController.getAllTransactions);
 
+router.get('/', authMiddleware, transactionController.getTransactionsByUser);
 
 
 module.exports = router;

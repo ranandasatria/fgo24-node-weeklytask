@@ -116,3 +116,49 @@ exports.getAllTransactions = async (req, res) => {
     });
   }
 };
+
+exports.getTransactionsByUser = async (req, res) => {
+  try {
+    const userId = req.user?.id;
+
+    const transactions = await Transaction.findAll({
+      where: { idUser: userId },
+      include: {
+        model: TransactionDetail,
+        as: 'details',
+        attributes: ['seat', 'price']
+      },
+      order: [['createdAt', 'DESC']]
+    });
+
+    const result = transactions.map((trx) => ({
+      id: trx.id,
+      idUser: trx.idUser,
+      idMovie: trx.idMovie,
+      showDate: trx.showDate,
+      showTime: trx.showTime,
+      location: trx.location,
+      cinema: trx.cinema,
+      totalPrice: trx.totalPrice,
+      paymentMethod: trx.paymentMethod,
+      createdAt: trx.createdAt,
+      updatedAt: trx.updatedAt,
+      seats: trx.details.map((d) => ({
+        seat: d.seat,
+        price: d.price
+      }))
+    }));
+
+    return res.status(http.HTTP_STATUS_OK).json({
+      success: true,
+      message: 'User transactions retrieved successfully',
+      data: result
+    });
+  } catch (error) {
+    console.error('Error fetching user transactions:', error);
+    return res.status(http.HTTP_STATUS_INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: 'Failed to retrieve user transactions'
+    });
+  }
+};
