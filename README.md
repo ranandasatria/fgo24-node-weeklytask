@@ -17,6 +17,7 @@ A full-featured cinema ticket booking RESTful API built with **Express.js**, **S
 ## Upcoming features
 - Auto generate name when register or create a new user
 - Get token via email to reset password
+- Hash password
 - Search, pagination, filter on get movies
 - Check seats availability
 
