@@ -1,4 +1,4 @@
-# Tickitz Backend API (Node.js Version)
+# Tontrix Backend API (Node.js Version)
 
 A full-featured cinema ticket booking RESTful API built with **Express.js**, **Sequelize (PostgreSQL)**, and **JWT authentication**. This project supports user registration, movie management, ticket purchasing, profile editing, and role-based access control for admins. 
 
