@@ -6,6 +6,7 @@ A full-featured cinema ticket booking RESTful API built with **Express.js**, **S
 - User registration & login with JWT
 - Role-based access: admin & regular user
 - User management by admin
+- Access and edit profile
 - Admin movie management (CRUD + image upload)
 - Browse all movies, now showing, and upcoming
 - Manage genres, directors, and actors
@@ -14,9 +15,10 @@ A full-featured cinema ticket booking RESTful API built with **Express.js**, **S
 - Middleware-based authentication & authorization
 
 ## Upcoming features
-- Access and edit profile
-- Check seats availability
+- Auto generate name when register or create a new user
 - Get token via email to reset password
+- Search, pagination, filter on get movies
+- Check seats availability
 
 
 ## Tech Stack
@@ -70,6 +72,8 @@ Authorization: Bearer <your_token_here>
 | GET    | /                              | Check if API is running             |
 | POST   | /register                      | Register a new user                 |
 | POST   | /login                         | Login and get token                 |
+| GET    | /profile                       | Get user profile                    |
+| PATCH  | /profile                       | Edit profile                        |
 | GET    | /users                         | Get all users (for admin)           |
 | GET    | /users/:id                     | Get user by ID (for admin)          | 
 | POST   | /users                         | Create new user (for admin)         |
@@ -99,8 +103,7 @@ Authorization: Bearer <your_token_here>
 |--------|--------------------------------|-------------------------------------|
 | POST | /forgot-password | Send password reset token via email |
 | POST | /reset-password | Reset password using token |
-| GET | /profile | Get logged-in user profile |
-| PATCH | /profile | Edit profile|
+
 
 ## ENTITY-RELATIONSHIP DIAGRAM 
 
