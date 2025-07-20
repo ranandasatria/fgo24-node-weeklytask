@@ -4,6 +4,7 @@ A full-featured cinema ticket booking RESTful API built with **Express.js**, **S
 
 ## Features
 - User registration & login with JWT
+- Role-based access: admin & regular user
 - User management by admin
 - Admin movie management (CRUD + image upload)
 - Browse all movies, now showing, and upcoming
@@ -13,9 +14,8 @@ A full-featured cinema ticket booking RESTful API built with **Express.js**, **S
 - Middleware-based authentication & authorization
 
 ## Upcoming features
-- Role-based access: admin & regular user
-- Check seats availability
 - Access and edit profile
+- Check seats availability
 - Get token via email to reset password
 
 
