@@ -16,7 +16,7 @@ exports.register = async (req, res) => {
       });
     }
 
-    const newUser = await Users.create({ email, password });
+    const newUser = await Users.create({ email, password, role: 'user' });
 
     return res.status(http.HTTP_STATUS_CREATED).json({
       success: true,
@@ -60,10 +60,11 @@ exports.login = async (req, res) => {
     const token = jwt.sign(
       {
         id: user.id,
-        email: user.email
+        email: user.email,
+        role: user.role
       },
       process.env.APP_SECRET,
-      { expiresIn: '1h' }
+      { expiresIn: '24h' }
     );
 
     return res.status(http.HTTP_STATUS_OK).json({

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const movieController = require('../controllers/movie.controller');
 const authMiddleware = require('../middlewares/auth.middleware');
+const adminCheck = require('../middlewares/admin.middleware');
 
 const { v4: uuid } = require("uuid");
 const path = require("node:path");
@@ -24,9 +25,11 @@ router.get('/', movieController.getAllMovies)
 
 router.get('/now-showing', movieController.getNowShowingMovies);
 router.get('/upcoming', movieController.getUpcomingMovies);
+router.get('/:id', movieController.getMovieById);
 
 router.post('/',
   authMiddleware,
+  adminCheck,
   uploadMovieImages.fields([
     { name: "image", maxCount: 1 },
     { name: "horizontalImage", maxCount: 1 }
@@ -34,10 +37,9 @@ router.post('/',
   movieController.createMovie
 );
 
-router.get('/:id', movieController.getMovieById)
-
-
 router.patch('/:id',
+  authMiddleware,
+  adminCheck,
   uploadMovieImages.fields([
     { name: "image", maxCount: 1 },
     { name: "horizontalImage", maxCount: 1 }
@@ -45,7 +47,7 @@ router.patch('/:id',
   movieController.updateMovie
 );
 
-router.delete('/:id', authMiddleware, movieController.deleteMovie);
+router.delete('/:id', authMiddleware, adminCheck, movieController.deleteMovie);
 
 
 module.exports = router;

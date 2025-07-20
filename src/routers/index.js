@@ -1,4 +1,5 @@
 const authMiddleware = require('../middlewares/auth.middleware')
+const adminCheck = require('../middlewares/admin.middleware')
 
 const routers = require('express').Router()
 
@@ -7,7 +8,7 @@ routers.get('/', (req, res) => {
 })
 
 routers.use('', require('./auth.router'))
-routers.use('/users', authMiddleware, require('./users.router'))
+routers.use('/users', authMiddleware, adminCheck, require('./users.router'))
 
 routers.use('/movies', require('./movie.router'));          
 routers.use('/admin/movies', require('./movie.router'));   
