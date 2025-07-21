@@ -5,6 +5,15 @@ const { Users } = require('../models');
 
 exports.register = async (req, res) => {
   const { email, password } = req.body;
+  const validate = validationResult(req);
+
+  if (!validate.isEmpty()) {
+    return res.status(http.HTTP_STATUS_BAD_REQUEST).json({
+      success: false,
+      message: 'Validation error',
+      errors: validate.array()
+    });
+  }
 
   try {
     const existingUser = await Users.findOne({ where: { email } });
@@ -16,14 +25,17 @@ exports.register = async (req, res) => {
       });
     }
 
-    const newUser = await Users.create({ email, password, role: 'user' });
+    const name = email.split("@")[0]
+
+    const newUser = await Users.create({ email, password, name, role: 'user' });
 
     return res.status(http.HTTP_STATUS_CREATED).json({
       success: true,
       message: 'Account created',
       results: {
         id: newUser.id,
-        email: newUser.email
+        email: newUser.email,
+        name: newUser.name
       }
     });
   } catch (err) {
