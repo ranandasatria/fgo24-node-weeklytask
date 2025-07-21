@@ -2,6 +2,7 @@ const { constants: http } = require('http2');
 const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const { Users } = require('../models');
+const { hashPassword, comparePasswords }= require('../utils/auth')
 
 exports.register = async (req, res) => {
   const { email, password } = req.body;
@@ -25,9 +26,12 @@ exports.register = async (req, res) => {
       });
     }
 
+    const hashedPassword = await hashPassword(password)
+
     const name = email.split("@")[0]
 
-    const newUser = await Users.create({ email, password, name, role: 'user' });
+
+    const newUser = await Users.create({ email, password: hashedPassword, name, role: 'user' });
 
     return res.status(http.HTTP_STATUS_CREATED).json({
       success: true,
@@ -62,7 +66,9 @@ exports.login = async (req, res) => {
   try {
     const user = await Users.findOne({ where: { email } });
 
-    if (!user || user.password !== password) {
+    const isMatch = await comparePasswords(password, user.password)
+
+    if (!user || !isMatch) {
       return res.status(http.HTTP_STATUS_UNAUTHORIZED).json({
         success: false,
         message: 'Wrong email or password'

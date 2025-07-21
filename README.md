@@ -3,7 +3,7 @@
 A full-featured cinema ticket booking RESTful API built with **Express.js**, **Sequelize (PostgreSQL)**, and **JWT authentication**. This project supports user registration, movie management, ticket purchasing, profile editing, and role-based access control for admins. 
 
 ## Features
-- User registration & login with JWT
+- User registration & login with JWT & bcryptjs
 - Role-based access: admin & regular user
 - User management by admin
 - Access and edit profile
@@ -15,9 +15,7 @@ A full-featured cinema ticket booking RESTful API built with **Express.js**, **S
 - Middleware-based authentication & authorization
 
 ## Upcoming features
-- Auto generate name when register or create a new user
 - Get token via email to reset password
-- Hash password
 - Search, pagination, filter on get movies
 - Check seats availability
 
@@ -26,6 +24,7 @@ A full-featured cinema ticket booking RESTful API built with **Express.js**, **S
 - Node.js with Express
 - PostgreSQL (via Sequelize ORM)
 - JWT for authentication
+- bcryptjs for password encryption
 - Multer for file uploads
 - UUID for unique file naming
 - dotenv for environment variables
