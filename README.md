@@ -7,6 +7,7 @@ A full-featured cinema ticket booking RESTful API built with **Express.js**, **S
 - Role-based access: admin & regular user
 - User management by admin
 - Access and edit profile
+- Reset password
 - Admin movie management (CRUD + image upload)
 - Browse all movies, now showing, and upcoming
 - Manage genres, directors, and actors
@@ -15,20 +16,18 @@ A full-featured cinema ticket booking RESTful API built with **Express.js**, **S
 - Middleware-based authentication & authorization
 
 ## Upcoming features
-- Get token via email to reset password
 - Search, pagination, filter on get movies
 - Check seats availability
-
 
 ## Tech Stack
 - Node.js with Express
 - PostgreSQL (via Sequelize ORM)
 - JWT for authentication
 - bcryptjs for password encryption
+- Redis for caching
 - Multer for file uploads
 - UUID for unique file naming
 - dotenv for environment variables
-
 
 ## How to Use
 
@@ -53,6 +52,9 @@ PGUSER=
 PGPASSWORD=
 PGDATABASE=
 PGPORT=
+REDIS_URL=
+EMAIL_SENDER=
+EMAIL_PASSWORD=
 ```
 
 ### 4. Run the program
@@ -71,6 +73,8 @@ Authorization: Bearer <your_token_here>
 |--------|--------------------------------|-------------------------------------|
 | GET    | /                              | Check if API is running             |
 | POST   | /register                      | Register a new user                 |
+| POST   | /forgot-password               | Send password reset token via email |
+| POST   | /reset-password                | Reset password using token          |
 | POST   | /login                         | Login and get token                 |
 | GET    | /profile                       | Get user profile                    |
 | PATCH  | /profile                       | Edit profile                        |
@@ -97,13 +101,6 @@ Authorization: Bearer <your_token_here>
 | POST   | /transactions                  | Create a transaction                |
 | GET    | /transactions                  | Get current user's transactions     |
 | GET    | /admin/transactions            | Get all transactions                |
-
-### Upcoming Endpoints
-| Method | Endpoint                       | Description                         |
-|--------|--------------------------------|-------------------------------------|
-| POST | /forgot-password | Send password reset token via email |
-| POST | /reset-password | Reset password using token |
-
 
 ## ENTITY-RELATIONSHIP DIAGRAM 
 
