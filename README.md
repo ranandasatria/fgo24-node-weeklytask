@@ -16,7 +16,6 @@ A full-featured cinema ticket booking RESTful API built with **Express.js**, **S
 - Middleware-based authentication & authorization
 
 ## Upcoming features
-- Search, pagination, filter on get movies
 - Check seats availability
 
 ## Tech Stack
