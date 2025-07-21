@@ -1,7 +1,8 @@
 const { Movie, Genre, Director, Actor } = require('../models');
 const { constants: http } = require('http2');
 const { Op } = require('sequelize');
-
+const redis = require('../services/redis.service');
+const clearMovieCache = require('../utils/clearMovieCache')
 
 exports.createMovie = async (req, res) => {
   const {
@@ -74,7 +75,7 @@ exports.createMovie = async (req, res) => {
       directors: Directors,
       actors: Actors
     };
-
+    await clearMovieCache();
     return res.status(http.HTTP_STATUS_CREATED).json({
       success: true,
       message: 'Movie created successfully',
@@ -90,13 +91,19 @@ exports.createMovie = async (req, res) => {
   }
 };
 
-
 exports.getAllMovies = async (req, res) => {
   try {
     const { search = "", page = 1 } = req.query;
     const limit = 5;
     const pageNumber = parseInt(page) || 1;
     const offset = (pageNumber - 1) * limit;
+
+    const redisKey = `movies:search=${search}:page=${pageNumber}`;
+
+    const cachedData = await redis.get(redisKey);
+    if (cachedData) {
+      return res.status(http.HTTP_STATUS_OK).json(JSON.parse(cachedData));
+    }
 
     const { count: totalData, rows: movies } = await Movie.findAndCountAll({
       where: {
@@ -129,7 +136,6 @@ exports.getAllMovies = async (req, res) => {
 
     const formattedMovies = movies.map(movie => {
       const { Genres, Directors, Actors, ...movieData } = movie.toJSON();
-
       return {
         ...movieData,
         genres: Genres,
@@ -138,7 +144,7 @@ exports.getAllMovies = async (req, res) => {
       };
     });
 
-    return res.status(http.HTTP_STATUS_OK).json({
+    const response = {
       success: true,
       message: search ? `Search results for "${search}":` : "List of movies",
       results: formattedMovies,
@@ -150,7 +156,10 @@ exports.getAllMovies = async (req, res) => {
         next: pageNumber < totalPage ? `/movies?page=${pageNumber + 1}&search=${search}` : null,
         prev: pageNumber > 1 ? `/movies?page=${pageNumber - 1}&search=${search}` : null
       }
-    });
+    };
+
+    await redis.set(redisKey, JSON.stringify(response));
+    return res.status(http.HTTP_STATUS_OK).json(response);
 
   } catch (err) {
     console.error("Error in getAllMovies:", err);
@@ -161,11 +170,16 @@ exports.getAllMovies = async (req, res) => {
   }
 };
 
-
-
 exports.getMovieById = async (req, res) => {
   const id = parseInt(req.params.id);
+  const redisKey = `movie:${id}`;
+
   try {
+    const cached = await redis.get(redisKey);
+    if (cached) {
+      return res.status(http.HTTP_STATUS_OK).json(JSON.parse(cached));
+    }
+
     const movie = await Movie.findByPk(id, {
       include: [
         {
@@ -193,11 +207,7 @@ exports.getMovieById = async (req, res) => {
       });
     }
 
-    const {
-      Genres, Directors, Actors,
-      ...movieData
-    } = movie.toJSON();
-
+    const { Genres, Directors, Actors, ...movieData } = movie.toJSON();
     const formattedMovie = {
       ...movieData,
       genres: Genres,
@@ -205,11 +215,14 @@ exports.getMovieById = async (req, res) => {
       actors: Actors
     };
 
-    return res.status(http.HTTP_STATUS_OK).json({
+    const response = {
       success: true,
       message: 'Movie detail',
       result: formattedMovie
-    });
+    };
+
+    await redis.set(redisKey, JSON.stringify(response));
+    return res.status(http.HTTP_STATUS_OK).json(response);
 
   } catch (err) {
     console.error(err);
@@ -236,6 +249,7 @@ exports.deleteMovie = async (req, res) => {
     await movie.setDirectors([]);
     await movie.setActors([]);
     await movie.destroy();
+    await clearMovieCache();
 
     return res.status(http.HTTP_STATUS_OK).json({
       success: true,
@@ -332,7 +346,7 @@ exports.updateMovie = async (req, res) => {
       directors: Directors,
       actors: Actors
     };
-
+    await clearMovieCache();
     return res.status(http.HTTP_STATUS_OK).json({
       success: true,
       message: 'Movie updated successfully',
@@ -347,7 +361,6 @@ exports.updateMovie = async (req, res) => {
     });
   }
 };
-
 
 exports.getNowShowingMovies = async (req, res) => {
   try {
