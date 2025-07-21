@@ -90,9 +90,20 @@ exports.createMovie = async (req, res) => {
   }
 };
 
+
 exports.getAllMovies = async (req, res) => {
   try {
-    const movies = await Movie.findAll({
+    const { search = "", page = 1 } = req.query;
+    const limit = 5;
+    const pageNumber = parseInt(page) || 1;
+    const offset = (pageNumber - 1) * limit;
+
+    const { count: totalData, rows: movies } = await Movie.findAndCountAll({
+      where: {
+        title: {
+          [Op.iLike]: `%${search}%`
+        }
+      },
       include: [
         {
           model: Genre,
@@ -109,8 +120,12 @@ exports.getAllMovies = async (req, res) => {
           attributes: ['id', 'actor_name'],
           through: { attributes: [] }
         }
-      ]
+      ],
+      limit,
+      offset
     });
+
+    const totalPage = Math.ceil(totalData / limit);
 
     const formattedMovies = movies.map(movie => {
       const { Genres, Directors, Actors, ...movieData } = movie.toJSON();
@@ -125,18 +140,27 @@ exports.getAllMovies = async (req, res) => {
 
     return res.status(http.HTTP_STATUS_OK).json({
       success: true,
-      message: 'List of movies',
-      results: formattedMovies
+      message: search ? `Search results for "${search}":` : "List of movies",
+      results: formattedMovies,
+      pageInfo: {
+        totalData,
+        totalPage,
+        currentPage: pageNumber,
+        limit,
+        next: pageNumber < totalPage ? `/movies?page=${pageNumber + 1}&search=${search}` : null,
+        prev: pageNumber > 1 ? `/movies?page=${pageNumber - 1}&search=${search}` : null
+      }
     });
 
   } catch (err) {
-    console.error(err);
+    console.error("Error in getAllMovies:", err);
     return res.status(http.HTTP_STATUS_INTERNAL_SERVER_ERROR).json({
       success: false,
       message: 'Failed to fetch movies'
     });
   }
 };
+
 
 
 exports.getMovieById = async (req, res) => {
